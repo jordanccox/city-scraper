@@ -3,15 +3,14 @@
 // latitude and longitude
 // only get cities with populations >= 6000
 
-// const puppeteer = require('puppeteer');
-
+import 'dotenv/config'
 import puppeteer from "puppeteer";
 
 const runWebScraper = async () => {
-  const browser = await puppeteer.launch({ headless: false }); // now you can see the browser running
+  const browser = await puppeteer.launch({ headless: true }); // you can see the browser running when headless: false
   const page = await browser.newPage();
 
-  await page.goto('https://www.city-data.com/');
+  await page.goto(`${process.env.WEBSITE}`);
 
   await page.setViewport({width: 1080, height: 1024});
 
@@ -20,7 +19,7 @@ const runWebScraper = async () => {
   await page.keyboard.press('Enter');
 
   const textSelector = await page.waitForSelector('.city');
-  const fullTitle = await textSelector?.evaluate(element => element.innerHTML);
+  const fullTitle = await textSelector?.evaluate(element => element.textContent);
 
   console.log(fullTitle);
 
